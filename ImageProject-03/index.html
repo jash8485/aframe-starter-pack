@@ -1,15 +1,217 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"> </script>
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+
+    <script>
+      // Create snow mounds when clicking the ground
+      AFRAME.registerComponent('spawn-snow', {
+        init: function () {
+          this.el.addEventListener('click', function (evt) {
+            const point = evt.detail.intersection.point;
+
+            const mound = document.createElement('a-sphere');
+            mound.setAttribute('radius', 0.8);
+            mound.setAttribute('src', '#snow');
+            mound.setAttribute('position',
+              point.x + ' 0.35 ' + point.z);
+            mound.setAttribute('scale', '1.3 0.8 1.1');
+
+            document.querySelector('a-scene').appendChild(mound);
+          });
+        }
+      });
+    </script>
   </head>
+
   <body>
     <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
+
+      <!-- Assets: Textures and 3D Models -->
+      <a-assets>
+        <img id="sky" src="Assets/WinterWonderland.jpg">
+        <img id="snow" src="Assets/SnowTexture.jpg">
+        <img id="coal" src="Assets/CoalTexture.jpg">
+        <img id="hat" src="Assets/MiddleofHat.jpg">
+        <img id="hatTop" src="Assets/BottomofHatandTopofFluffballTexture.jpg">
+        <img id="ornament" src="Assets/OrnamentTexture.jpg">
+        <img id="ornament1" src="Assets/OrnamentTexture1.jpg">
+        <img id="ornament2" src="Assets/OrnamentTexture2.jpg">
+        <img id="ornament3" src="Assets/OrnamentTexture3.jpg">
+        <img id="tree" src="Assets/PineTreeLeavesTexture.jpg">
+        <img id="bark" src="Assets/TreeBARKTexture.jpg">
+
+        <!-- 2 3D Models -->
+        <a-asset-item id="present" src="Assets/3DPresent.glb"></a-asset-item>
+        <a-asset-item id="sled" src="Assets/3DSled.glb"></a-asset-item>
+      </a-assets>
+
+      <!-- Camera and Mouse -->
+      <a-entity camera look-controls position="0 1.6 3"></a-entity>
+      <a-entity cursor="rayOrigin: mouse"
+        raycaster="objects: .clickable">
+      </a-entity>
+
+      <a-sky src="#sky"></a-sky>
+
+      <!-- Clickable Snow Ground -->
+      <a-plane position="0 0 -5" rotation="-90 0 0"
+        width="30" height="30" src="#snow"
+        class="clickable" spawn-snow>
+      </a-plane>
+
+      <!-- Snowman Body -->
+      <a-sphere position="1 1 -6" radius="1" src="#snow"></a-sphere>
+      <a-sphere position="1.05 2.3 -6" radius="0.7" src="#snow"></a-sphere>
+      <a-sphere position="1.1 3.3 -6" radius="0.5" src="#snow"></a-sphere>
+
+      <!-- Snowman Eyes -->
+      <a-sphere position="0.92 3.4 -5.55" radius="0.08" src="#coal"></a-sphere>
+      <a-sphere position="1.25 3.4 -5.55" radius="0.08" src="#coal"></a-sphere>
+
+      <!-- Carrot Nose -->
+      <a-cone position="1.1 3.2 -5.25"
+        rotation="90 0 0"
+        radius-bottom="0.14" radius-top="0"
+        height="0.6" color="orange">
+      </a-cone>
+
+      <!-- Three Coal Buttons -->
+      <a-sphere position="1.1 2.55 -5.35" radius="0.1" src="#coal"></a-sphere>
+      <a-sphere position="1.15 2.2 -5.35" radius="0.1" src="#coal"></a-sphere>
+      <a-sphere position="1.18 1.85 -5.45" radius="0.1" src="#coal"></a-sphere>
+
+      <!-- Hat -->
+      <a-cylinder position="-5.5 0.2 -4.5"
+        radius="0.6" height="0.3" src="#hatTop">
+      </a-cylinder>
+
+      <a-cone position="-5.5 0.65 -4.5"
+        radius-bottom="0.55" radius-top="0.08"
+        height="0.8" src="#hat">
+      </a-cone>
+
+      <!-- Hat Puff Ball -->
+      <a-sphere position="-5.5 1.1 -4.5"
+        radius="0.2" src="#hatTop">
+      </a-sphere>
+
+      <!-- Large Ornament -->
+      <a-sphere position="-4 0.8 -5.7"
+        radius="0.7" src="#ornament">
+      </a-sphere>
+
+      <!-- Gray Ornament Cap -->
+      <a-cylinder position="-4 1.55 -5.7"
+        radius="0.2" height="0.2" color="Gray">
+      </a-cylinder>
+
+      <!-- Pine Tree Trunk -->
+      <a-cylinder position="3.8 1 -6.8"
+        radius="0.25" height="2" src="#bark">
+      </a-cylinder>
+
+      <!-- Pine Tree Leaves -->
+      <a-cone position="3.8 2 -6.8"
+        radius-bottom="1.2" height="2" src="#tree">
+      </a-cone>
+
+      <a-cone position="3.8 3 -6.8"
+        radius-bottom="0.9" height="2" src="#tree">
+      </a-cone>
+
+      <a-cone position="3.8 4 -6.8"
+        radius-bottom="0.6" height="1.5" src="#tree">
+      </a-cone>
+
+      <!-- Mini Christmas Tree Ornaments -->
+      <a-sphere position="3.4 2.2 -5.85" radius="0.18" src="#ornament"></a-sphere>
+      <a-sphere position="4.2 2.5 -5.95" radius="0.2" src="#ornament1"></a-sphere>
+      <a-sphere position="3.8 3.2 -6.05" radius="0.16" src="#ornament2"></a-sphere>
+      <a-sphere position="4.1 3.7 -6.35" radius="0.15" src="#ornament3"></a-sphere>
+      <a-sphere position="3.2 2.8 -6.2" radius="0.18" src="#ornament1"></a-sphere>
+      <a-sphere position="4.5 1.8 -6.1" radius="0.2" src="#ornament2"></a-sphere>
+      <a-sphere position="3.6 4.1 -6.45" radius="0.13" src="#ornament3"></a-sphere>
+      <a-sphere position="3.9 1.6 -5.75" radius="0.19" src="#ornament"></a-sphere>
+
+      <!-- 3D Christmas Present -->
+      <a-entity
+        gltf-model="#present"
+        position="-1.5 0.3 -5"
+        rotation="0 25 0"
+        scale="0.7 0.7 0.7">
+      </a-entity>
+
+      <!-- 3D Christmas Sled -->
+      <a-entity
+        gltf-model="#sled"
+        position="2.6 0 -4.8"
+        rotation="0 -30 0"
+        scale="0.004 0.004 0.004">
+      </a-entity>
+
+      <!-- Snow Mounds -->
+      <a-sphere position="-1.8 0.35 -7.3"
+        radius="0.8" scale="1.5 0.8 1.2" src="#snow">
+      </a-sphere>
+
+      <a-sphere position="4.8 0.3 -4.8"
+        radius="0.7" scale="1.2 0.7 1.1" src="#snow">
+      </a-sphere>
+
+      <a-sphere position="0.1 0.25 -8.2"
+        radius="0.6" scale="1.4 0.7 1" src="#snow">
+      </a-sphere>
+
+      <!-- Falling Snow Animation-->
+      <a-sphere radius="0.06" color="white"
+        animation="property: position; from: -4 5 -4; to: -4 0 -4; dur: 4000; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.05" color="white"
+        animation="property: position; from: -2 6 -3; to: -2 0 -3; dur: 5000; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.07" color="white"
+        animation="property: position; from: 0 5 -3; to: 0 0 -3; dur: 3500; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.05" color="white"
+        animation="property: position; from: 2 6 -4; to: 2 0 -4; dur: 4500; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.06" color="white"
+        animation="property: position; from: 4 5 -5; to: 4 0 -5; dur: 5500; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.04" color="white"
+        animation="property: position; from: -3 5 -7; to: -3 0 -7; dur: 6000; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.05" color="white"
+        animation="property: position; from: 1 6 -7; to: 1 0 -7; dur: 4800; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.07" color="white"
+        animation="property: position; from: 3 5 -3; to: 3 0 -3; dur: 3800; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.04" color="white"
+        animation="property: position; from: -1 6 -6; to: -1 0 -6; dur: 5200; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.06" color="white"
+        animation="property: position; from: 5 6 -7; to: 5 0 -7; dur: 4300; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.05" color="white"
+        animation="property: position; from: -5 5 -3; to: -5 0 -3; dur: 5700; loop: true">
+      </a-sphere>
+
+      <a-sphere radius="0.04" color="white"
+        animation="property: position; from: 1.5 5 -2; to: 1.5 0 -2; dur: 4700; loop: true">
+      </a-sphere>
+
     </a-scene>
   </body>
 </html>
